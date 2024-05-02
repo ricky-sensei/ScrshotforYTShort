@@ -1,9 +1,6 @@
 # grabscreen.py
 
 import pyscreenshot as ImageGrab
-import os
-from pynput.mouse import Listener
-import sys
 from PIL import Image
 from io import BytesIO
 import win32clipboard
@@ -11,9 +8,6 @@ import pygame
 import win32api
 import win32con
 import win32gui
-import time
-
-from pygame import gfxdraw
 
 
 def send_to_clipboard(clip_type, data):
@@ -38,10 +32,12 @@ pygame.init()
 info = pygame.display.Info()
 w = info.current_w
 h = info.current_h
-screen = pygame.display.set_mode((w, h), pygame.NOFRAME)  
+screen = pygame.display.set_mode((w, h), pygame.NOFRAME)
 done = False
 fuchsia = (255, 0, 128)  # Transparency color
 dark_red = (255, 0, 0)
+
+
 
 # Create layered window
 hwnd = pygame.display.get_wm_info()["window"]
@@ -55,15 +51,15 @@ win32gui.SetWindowLong(
 win32gui.SetLayeredWindowAttributes(
     hwnd, win32api.RGB(*fuchsia), 50, win32con.LWA_ALPHA
 )
-font = pygame.font.SysFont("Arial", 72)
+font = pygame.font.Font("MochiyPopOne-Regular.ttf", 72)
 text = []
 text.append(
     (
-        font.render("Click on top left of the part you want to grab", 0, dark_red),
+        font.render("撮影範囲の左上をクリック", 0, dark_red),
         (0, 10),
     )
 )
-text.append((font.render("Press Esc to close the window", 0, dark_red), (0, 100)))
+text.append((font.render("Escキーで終了", 0, dark_red), (0, 100)))
 
 
 def show_text():
@@ -85,7 +81,6 @@ while not done:
             if event.key == pygame.K_ESCAPE:
                 done = True
         if event.type == pygame.MOUSEBUTTONDOWN:
-            # time.sleep(.1)
             if click1 == 0:
                 x1, y1 = pygame.mouse.get_pos()
                 print(x1, y1)
@@ -104,7 +99,7 @@ while not done:
                 done = True
 
     screen.fill((255, 255, 255))  # Transparent background
-    # show_text()
+    show_text()
     if click1 == 0:
         mx, my = pygame.mouse.get_pos()
         dx = 5
